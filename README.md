@@ -84,6 +84,8 @@ Après l'installation des dépendances, le moteur d'analyse ne fait aucun appel 
 
 L'historique est conservé dans `db/safesignal.sqlite3` sur la machine qui exécute SafeSignal. Il est désactivé par défaut. Si vous activez la case d'enregistrement, le rapport et le texte original sont stockés localement. Ne l'activez pas pour des messages que vous ne souhaitez pas conserver. La suppression vide les entrées de la base applicative, mais ne supprime pas d'éventuelles sauvegardes système.
 
+Les captures d’écran envoyées à l’outil OCR sont traitées en mémoire par l’instance SafeSignal qui exécute l’application ; elles ne sont pas ajoutées à la base SQLite et aucun fichier image n’est écrit par le module OCR. Comme toute application web, l’instance reçoit temporairement le fichier pendant le traitement et la session Streamlit peut conserver temporairement le téléversement ou le texte extrait en mémoire. Cela n’équivaut pas à une conservation permanente ; si l’application est hébergée sur un serveur distant, l’image transite vers ce serveur. N’utilisez pas une instance hébergée dont vous ne connaissez pas l’exploitant pour des messages ou images confidentiels.
+
 ## Vérifications et tests
 
 Tests unitaires :
