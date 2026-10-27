@@ -24,6 +24,14 @@ class StoragePrivacyTests(unittest.TestCase):
             count = conn.execute("SELECT COUNT(*) FROM analyses").fetchone()[0]
         self.assertEqual(count, 0)
 
+    def test_no_consent_leaves_no_private_text_in_database_file(self):
+        marker = "UNIQUE_PRIVATE_MARKER_7f9b2a"
+        saved = storage.save_analysis(self.report, marker, consent=False)
+        self.assertFalse(saved)
+        database_bytes = storage.DB_PATH.read_bytes()
+        self.assertNotIn(marker.encode("utf-8"), database_bytes)
+        self.assertEqual(storage.list_history(), [])
+
     def test_explicit_consent_stores_text_and_history_returns_it(self):
         saved = storage.save_analysis(self.report, "CONSENTED TEXT", consent=True)
         self.assertTrue(saved)
