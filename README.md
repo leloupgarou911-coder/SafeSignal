@@ -16,9 +16,9 @@ Le workflow GitHub Actions exécute un test navigateur Chromium sur les trois la
 - Le lien « aller au contenu principal » permet de sauter les éléments de navigation.
 - Les contrôles clavier disposent d’un indicateur de focus visible et contrasté ; les onglets peuvent être parcourus au clavier.
 - Les textes secondaires et la bannière de confidentialité utilisent des couleurs vérifiées par des tests de contraste WCAG AA pour les combinaisons déclarées.
-- Les tests navigateur contrôlent les noms accessibles des onglets, la navigation par flèches et la direction LTR/RTL en français, anglais et arabe.
+- Les tests navigateur contrôlent les noms accessibles des onglets, la navigation par flèches, la direction LTR/RTL et la disposition à 720, 375 et 320 pixels en français, anglais et arabe. Le test à 720 px simule une fenêtre CSS plus étroite comparable à un zoom important, sans remplacer un test de zoom réel.
 
-Ces contrôles automatisés sont une base de régression, pas une certification complète WCAG. Une vérification avec lecteur d’écran et des utilisateurs reste recommandée.
+Ces contrôles automatisés sont une base de régression, pas une certification complète WCAG. Le pipeline ne lance pas de lecteur d’écran : il vérifie des noms accessibles et la navigation clavier, mais une vérification manuelle avec NVDA ou Orca, un zoom réel à 200 % et un essai utilisateur restent nécessaires.
 
 ## Fonctionnalités
 
@@ -106,7 +106,7 @@ python -m playwright install chromium
 python tests/browser_smoke.py
 ```
 
-Le corpus est petit, fixe et artificiel. Ses métriques servent à comparer les changements sur ces exemples seulement ; elles **ne représentent pas la précision réelle** sur les messages reçus dans la vie quotidienne.
+Le corpus synthétique comporte maintenant davantage de messages légitimes (dont des mentions ordinaires de marques, banques et colis) et suspects en français, anglais et arabe algérien. Les métriques servent à comparer les changements sur ces exemples seulement ; elles **ne représentent pas la précision réelle** sur les messages reçus dans la vie quotidienne. Chaque faux positif doit être examiné avant d'ajouter de nouvelles règles.
 
 ## Architecture
 
