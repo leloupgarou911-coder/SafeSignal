@@ -73,5 +73,15 @@
   "ocr_unavailable": "OCR indisponible :",
   "ocr_result": "Texte extrait (vous pouvez le copier dans l’onglet Analyser)",
   "ocr_copy_hint": "Relisez le texte extrait : l’OCR peut confondre des caractères, chiffres ou liens.",
-  "ocr_no_text": "Aucun texte n’a été reconnu. Essayez une image plus nette ou une autre langue."
+  "ocr_no_text": "Aucun texte n’a été reconnu. Essayez une image plus nette ou une autre langue.",
+  "calibration_title": "Mesurer le corpus de test",
+  "calibration_intro": "Calcule des indicateurs sur les exemples synthétiques inclus dans le dépôt.",
+  "calibration_button": "Évaluer le corpus synthétique",
+  "calibration_note": "Attention : ces résultats décrivent uniquement ce petit corpus artificiel. Ils ne mesurent pas la précision réelle sur les messages du quotidien.",
+  "calibration_total": "Exemples évalués",
+  "calibration_precision": "Précision",
+  "calibration_recall": "Rappel",
+  "calibration_specificity": "Spécificité",
+  "calibration_language": "Résultats par langue",
+  "calibration_counts": "TP : {tp} · FP : {fp} · TN : {tn} · FN : {fn}"
 }
