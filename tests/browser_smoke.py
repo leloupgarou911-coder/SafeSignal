@@ -13,6 +13,8 @@ URL = "http://127.0.0.1:8501"
 EXPECTED = {
     "Français": {
         "heading": "Examinez un message",
+        "paste_label": "Collez le SMS, e-mail ou message ici",
+        "save_option": "Enregistrer dans l’historique local (inclut le texte original)",
         "ocr_tab": "🖼️ OCR local", "about_tab": "À propos", "skip_link": "Aller au contenu principal",
         "prevention_tab": "Conseils & Prévention",
         "guide": "Phishing / hameçonnage",
@@ -22,6 +24,8 @@ EXPECTED = {
     },
     "English": {
         "heading": "Check a message",
+        "paste_label": "Paste SMS, email, or message here",
+        "save_option": "Save to local history (includes original text)",
         "ocr_tab": "🖼️ Local OCR", "about_tab": "About", "skip_link": "Skip to main content",
         "prevention_tab": "Advice & Prevention",
         "guide": "Phishing and credential theft",
@@ -31,6 +35,8 @@ EXPECTED = {
     },
     "العربية": {
         "heading": "افحص رسالة",
+        "paste_label": "الصق الرسالة أو البريد هنا",
+        "save_option": "حفظ في السجل المحلي (يتضمن النص الأصلي)",
         "ocr_tab": "🖼️ استخراج النص محلياً", "about_tab": "حول التطبيق", "skip_link": "انتقل إلى المحتوى الرئيسي",
         "prevention_tab": "النصائح والوقاية",
         "guide": "التصيد الاحتيالي وسرقة بيانات الدخول",
@@ -84,6 +90,12 @@ def main():
                 assert skip_link.count() == 1, f'Skip-to-content link is missing for {language}'
                 assert skip_link.inner_text() == expected["skip_link"], (
                     f'Skip-to-content link is untranslated for {language}: {skip_link.inner_text()}'
+                )
+                assert page.get_by_role("textbox", name=expected["paste_label"]).count() == 1, (
+                    f'Main message field has no accessible name for {language}'
+                )
+                assert page.get_by_role("checkbox", name=expected["save_option"]).count() == 1, (
+                    f'Consent checkbox has no accessible name for {language}'
                 )
                 assert page.get_by_role("tab", name=expected["ocr_tab"]).count() == 1, (
                     f'OCR tab has no accessible translated name for {language}'
