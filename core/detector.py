@@ -27,10 +27,40 @@ REGIONAL_RISK_CUE = re.compile(
 )
 
 
-def analyze_message(text: str, language: str = "fr") -> dict:
+def analyze_message(text: str, language: str = "fr", custom_rules=None) -> dict:
     """Apply transparent rules. 'language' controls report translations, not detection."""
     language = language if language in {"fr", "en", "ar"} else "fr"
     findings = []
+    normalized_text = text.casefold()
+    # Custom rules are supplied by the UI/storage layer so the detector remains
+    # usable in tests and command-line contexts without requiring a database.
+    for custom_rule in custom_rules or ():
+        try:
+            rule_id, keyword, label, explanation = custom_rule
+        except (TypeError, ValueError):
+            continue
+        keyword = str(keyword).strip()
+        if keyword and keyword.casefold() in normalized_text:
+            findings.append({
+                "rule_id": f"custom_rule_{rule_id}",
+                "category": "custom",
+                "title": str(label),
+                "explanation": (
+                    f"Mot-clé personnalisé détecté (« {keyword} ») : {explanation}"
+                    if language == "fr" else
+                    f"Custom keyword detected (“{keyword}”): {explanation}"
+                    if language == "en" else
+                    f"تم اكتشاف كلمة مخصصة (« {keyword} »): {explanation}"
+                ),
+                "advice": {
+                    "fr": "Vérifiez ce signal avec une source indépendante avant d'agir.",
+                    "en": "Verify this signal independently before taking action.",
+                    "ar": "تحقق من هذا المؤشر عبر مصدر مستقل قبل اتخاذ أي إجراء.",
+                }[language],
+                "severity": "low",
+                "confidence": "low",
+                "evidence": "« " + keyword[:100] + " »",
+            })
     for rule in RULES:
         match = rule.pattern.search(text)
         if match:
