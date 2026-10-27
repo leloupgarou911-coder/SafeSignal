@@ -5,7 +5,7 @@ from .base import Rule
 RULES = [
     Rule(
         "regional_payment_impersonation", "regional_impersonation",
-        re.compile(r"\b(baridi\s?mob|baridimob|alg[eé]rie\s?poste|poste\s?alg[eé]rienne|edahabia|carte\s+edahabia|ccp|mobilis|djezzy|ooredoo|satim|cib)\b", re.I),
+        re.compile(r"\b(baridi\s?mob|baridimob|alg[eé]rie\s?poste|poste\s?alg[eé]rienne|edahabia|carte\s+edahabia|ccp|mobilis|djezzy|ooredoo|satim|cib)\b|بريدي\s?موب|الذهبية|بريد الجزائر", re.I),
         {"fr":"Service de paiement ou opérateur cité","en":"Payment service or carrier mentioned","ar":"ذُكرت خدمة دفع أو شركة اتصالات"},
         {"fr":"Des messages frauduleux peuvent reprendre le nom de services de paiement, de cartes ou d'opérateurs utilisés localement. La mention de ce nom ne prouve pas une usurpation.","en":"Fraudulent messages may reuse names of local payment services, cards, or mobile carriers. Mentioning a name does not prove impersonation.","ar":"قد تستخدم الرسائل الاحتيالية أسماء خدمات دفع أو بطاقات أو شركات اتصالات محلية. ذكر الاسم وحده لا يثبت انتحال الهوية."},
         {"fr":"Ne suivez pas le lien reçu. Ouvrez l'application ou le site officiel vous-même et ne partagez aucun code secret.","en":"Do not follow the received link. Open the official app or site yourself and never share secret codes.","ar":"لا تتبع الرابط المرسل. افتح التطبيق أو الموقع الرسمي بنفسك ولا تشارك الرموز السرية."},
