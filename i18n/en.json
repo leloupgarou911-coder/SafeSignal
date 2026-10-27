@@ -83,5 +83,8 @@
   "calibration_recall": "Recall",
   "calibration_specificity": "Specificity",
   "calibration_language": "Results by language",
-  "calibration_counts": "TP: {tp} · FP: {fp} · TN: {tn} · FN: {fn}"
+  "calibration_counts": "TP: {tp} · FP: {fp} · TN: {tn} · FN: {fn}",
+  "skip_to_content": "Skip to main content",
+  "message_help": "Paste the text to inspect. It stays in the session unless you explicitly choose to save it.",
+  "ocr_language_help": "Choose the main language shown in the screenshot. The extracted text may contain errors."
 }
