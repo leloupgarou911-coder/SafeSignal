@@ -6,9 +6,10 @@ from .rules.impersonation import RULES as IDENTITY
 from .rules.pressure import RULES as PRESSURE
 from .rules.formatting import RULES as FORMATTING
 from .rules.regional import RULES as REGIONAL
+from .rules.financial_indicators import RULES as FINANCIAL
 
 # Ajouter une famille de règles ici sans modifier l'algorithme d'analyse.
-RULES = URGENCY + REWARD + LINKS + DATA + IDENTITY + PRESSURE + FORMATTING + REGIONAL
+RULES = URGENCY + REWARD + LINKS + DATA + IDENTITY + PRESSURE + FORMATTING + REGIONAL + FINANCIAL
 
 # A local brand name alone is not a warning sign. Require a social-engineering cue.
 import re
@@ -20,6 +21,7 @@ REGIONAL_RISK_CUE = re.compile(
     r"compte.{0,20}(?:bloqu|suspend)|account.{0,20}(?:blocked|suspended))",
     re.I,
 )
+
 
 def analyze_message(text: str, language: str = "fr") -> dict:
     """Apply transparent rules. 'language' controls report translations, not detection."""
