@@ -60,7 +60,11 @@ except (sqlite3.Error, OSError):
 
 st.set_page_config(page_title="SafeSignal", page_icon="🛡️", layout="wide")
 LANGS = {"Français": "fr", "English": "en", "العربية": "ar"}
-label = st.sidebar.selectbox("Interface language / لغة الواجهة", list(LANGS))
+label = st.sidebar.selectbox(
+    "Langue de l’interface / Interface language / لغة الواجهة",
+    list(LANGS),
+    help="Choisissez la langue des menus et explications. / Choose the language used by menus and explanations. / اختر لغة القوائم والشروحات.",
+)
 lang = LANGS[label]
 T = json.loads((ROOT / "i18n" / f"{lang}.json").read_text(encoding="utf-8"))
 E = ERRORS[lang]
@@ -68,14 +72,34 @@ HL = HISTORY_LABELS[lang]
 direction = "rtl" if lang == "ar" else "ltr"
 text_align = "right" if lang == "ar" else "left"
 st.markdown(f"""<style>
+:root {{ color-scheme: light; }}
 html, body, [data-testid="stAppViewContainer"] {{ direction: {direction}; }}
 .block-container {{ max-width:1200px; padding-top:2rem; padding-bottom:3rem; }}
 .stTextArea textarea, .stTextInput input {{ direction: {direction}; text-align: {text_align}; }}
 [data-testid="stTabs"] [role="tablist"] {{ direction: {direction}; gap:.35rem; flex-wrap:wrap; }}
-[data-testid="stMarkdownContainer"], [data-testid="stCaptionContainer"] {{ text-align: {text_align}; }}
+[data-testid="stMarkdownContainer"] {{ text-align: {text_align}; }}
+[data-testid="stCaptionContainer"], small {{ color:#465568 !important; }}
+label, legend {{ color:#243447 !important; }}
 .trust {{ padding:1rem 1.15rem; border-radius:14px; background:#eaf5ff; border:1px solid #b7dcfa; color:#12344d; text-align:{text_align}; margin:.6rem 0 1.2rem; }}
-div[data-testid="stVerticalBlockBorderWrapper"] {{ border-color:#d7e7f5; border-radius:14px; }}
+div[data-testid="stVerticalBlockBorderWrapper"] {{ border-color:#b8c9da; border-radius:14px; }}
+/* Strong visible focus indicator for keyboard navigation. */
+:where(button, a, input, textarea, select, [role="tab"], [role="radio"], [role="checkbox"], [tabindex]):focus-visible {{
+  outline:3px solid #075fc7 !important;
+  outline-offset:3px !important;
+  box-shadow:0 0 0 2px #ffffff !important;
+}}
+.skip-link {{
+  position:fixed; z-index:10000; top:.5rem; left:.5rem; padding:.75rem 1rem;
+  background:#ffffff; color:#12344d; border:2px solid #075fc7; border-radius:8px;
+  transform:translateY(-180%);
+}}
+.skip-link:focus {{ transform:translateY(0); }}
 </style>""", unsafe_allow_html=True)
+st.markdown(
+    f'<a class="skip-link" href="#main-content">{T["skip_to_content"]}</a>',
+    unsafe_allow_html=True,
+)
+st.markdown('<div id="main-content" tabindex="-1"></div>', unsafe_allow_html=True)
 st.title("🛡️ SafeSignal")
 st.caption(T["tagline"])
 st.markdown(f'<div class="trust">🔒 <b>{T["privacy_title"]}</b><br>{T["privacy_text"]}</div>', unsafe_allow_html=True)
@@ -89,7 +113,7 @@ analyze_tab, ocr_tab, library_tab, prevention_tab, rules_tab, quiz_tab, history_
 
 with analyze_tab:
     st.subheader(T["paste_title"])
-    message = st.text_area(T["paste_label"], height=190, max_chars=20000, placeholder=T["placeholder"])
+    message = st.text_area(T["paste_label"], height=190, max_chars=20000, placeholder=T["placeholder"], help=T["message_help"])
     consent = st.checkbox(T["save_option"], value=False, help=T["save_help"])
     if st.button(T["analyze_button"], type="primary", use_container_width=True):
         if not message.strip():
@@ -143,6 +167,7 @@ with ocr_tab:
         T["ocr_language"],
         [T["ocr_french"], T["ocr_english"], T["ocr_arabic"]],
         key="ocr_language_choice",
+        help=T["ocr_language_help"],
     )
     language_codes = {
         T["ocr_french"]: "fra+eng",
