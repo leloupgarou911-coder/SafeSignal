@@ -10,6 +10,7 @@ from core.explain import LIBRARY
 from core.prevention import get_guides
 from core.quiz import get_quiz
 from core.ocr import extract_text, InvalidImageError, OCRUnavailableError
+from core.calibration import evaluate_synthetic_corpus
 from db.storage import (
     add_custom_rule, clear_history, delete_custom_rule, get_custom_rules,
     init_db, list_history, save_analysis,
@@ -308,3 +309,21 @@ with about_tab:
     st.subheader(T["about"])
     st.write(T["about_text"])
     st.warning(T["safety_note"])
+    st.divider()
+    st.subheader(T["calibration_title"])
+    st.caption(T["calibration_intro"])
+    st.warning(T["calibration_note"])
+    if st.button(T["calibration_button"], key="evaluate_synthetic_corpus"):
+        calibration = evaluate_synthetic_corpus()
+        def display_rate(value):
+            return "—" if value is None else f"{value:.1%}"
+        metric_columns = st.columns(4)
+        metric_columns[0].metric(T["calibration_total"], calibration["total"])
+        metric_columns[1].metric(T["calibration_precision"], display_rate(calibration["precision"]))
+        metric_columns[2].metric(T["calibration_recall"], display_rate(calibration["recall"]))
+        metric_columns[3].metric(T["calibration_specificity"], display_rate(calibration["specificity"]))
+        st.markdown(f'**{T["calibration_language"]}**')
+        for language, counts in calibration["by_language"].items():
+            st.write(
+                f'{language}: {T["calibration_counts"].format(tp=counts["tp"], fp=counts["fp"], tn=counts["tn"], fn=counts["fn"])}'
+            )
