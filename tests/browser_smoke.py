@@ -117,16 +117,12 @@ def main():
                 consent_box = page.get_by_role("checkbox", name=expected["save_option"])
                 message_box.fill("Non-consented browser reset smoke-test message")
                 page.get_by_role("button", name=expected["analyze_button"]).click()
-                assert page.get_by_text(expected["report_title"], exact=True).count() == 1, (
-                    f'Analysis report was not displayed for {language}'
-                )
+                report_heading = page.get_by_role("heading", name=expected["report_title"], exact=True)
+                report_heading.wait_for(state="visible", timeout=5000)
                 page.get_by_role("button", name=expected["clear_message"]).click()
-                page.wait_for_timeout(200)
+                report_heading.wait_for(state="hidden", timeout=5000)
                 assert message_box.input_value() == "", f'Message was not cleared for {language}'
                 assert not consent_box.is_checked(), f'Consent was not reset for {language}'
-                assert page.get_by_text(expected["report_title"], exact=True).count() == 0, (
-                    f'Analysis report remained after reset for {language}'
-                )
                 # A checked consent box must also reset, without saving the test text.
                 message_box.fill("Must-not-be-saved reset test")
                 consent_box.check(force=True)
@@ -148,14 +144,10 @@ def main():
                     ),
                 })
                 page.wait_for_timeout(250)
-                assert page.get_by_text(expected["ocr_preview"], exact=True).count() == 1, (
-                    f'OCR image preview did not appear for {language}'
-                )
+                preview_caption = page.get_by_text(expected["ocr_preview"], exact=True)
+                preview_caption.wait_for(state="visible", timeout=5000)
                 page.get_by_role("button", name=expected["ocr_clear"]).click()
-                page.wait_for_timeout(200)
-                assert page.get_by_text(expected["ocr_preview"], exact=True).count() == 0, (
-                    f'OCR preview remained after reset for {language}'
-                )
+                preview_caption.wait_for(state="hidden", timeout=5000)
                 page.get_by_role("tab", name=expected["about_tab"]).click()
                 page.wait_for_timeout(150)
                 assert page.get_by_role("tab", name=expected["ocr_tab"]).count() == 1, (
