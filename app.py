@@ -17,6 +17,9 @@ direction = "rtl" if lang == "ar" else "ltr"
 st.markdown(f"""<style>
 html, body, [data-testid="stAppViewContainer"] {{ direction: {direction}; }}
 .block-container {{ max-width:900px; padding-top:2rem; }}
+.stTextArea textarea, .stTextInput input {{ direction: {direction}; text-align: {'right' if lang == 'ar' else 'left'}; }}
+[data-testid="stTabs"] [role="tablist"] {{ direction: {direction}; }}
+[data-testid="stMarkdownContainer"], [data-testid="stCaptionContainer"] {{ text-align: {'right' if lang == 'ar' else 'left'}; }}
 .trust {{ padding:1rem; border-radius:12px; background:#eaf5ff; border:1px solid #b7dcfa; color:#12344d; text-align:{'right' if lang == 'ar' else 'left'}; }}
 </style>""",unsafe_allow_html=True)
 st.title("🛡️ SafeSignal")
