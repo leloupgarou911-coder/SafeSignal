@@ -15,16 +15,22 @@ EXPECTED = {
         "heading": "Examinez un message",
         "prevention_tab": "Conseils & Prévention",
         "guide": "Phishing / hameçonnage",
+        "rules_tab": "⚙️ Mes règles", "rules_heading": "Gérer mes règles d’alerte personnalisées",
+        "quiz_tab": "🎮 Quiz réflexes", "quiz_heading": "Testez vos réflexes anti-arnaque",
     },
     "English": {
         "heading": "Check a message",
         "prevention_tab": "Advice & Prevention",
         "guide": "Phishing and credential theft",
+        "rules_tab": "⚙️ My rules", "rules_heading": "Manage my custom alert rules",
+        "quiz_tab": "🎮 Scam-awareness quiz", "quiz_heading": "Test your scam-awareness reflexes",
     },
     "العربية": {
         "heading": "افحص رسالة",
         "prevention_tab": "النصائح والوقاية",
         "guide": "التصيد الاحتيالي وسرقة بيانات الدخول",
+        "rules_tab": "⚙️ قواعدي", "rules_heading": "إدارة قواعد التنبيه المخصصة",
+        "quiz_tab": "🎮 اختبار اليقظة", "quiz_heading": "اختبر قدرتك على تمييز الاحتيال",
     },
 }
 
@@ -76,7 +82,23 @@ def main():
                     f'Prevention guide did not render in {language}'
                 )
                 page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-prevention.png"), full_page=True)
-                print(f"PASS {language}: analysis and prevention guide rendered")
+                rules_tab = page.get_by_role("tab", name=expected["rules_tab"])
+                rules_tab.click()
+                page.wait_for_timeout(300)
+                assert page.get_by_text(expected["rules_heading"], exact=True).count() > 0, (
+                    f'Custom rules tab did not render in {language}'
+                )
+                quiz_tab = page.get_by_role("tab", name=expected["quiz_tab"])
+                quiz_tab.click()
+                page.wait_for_timeout(300)
+                assert page.get_by_text(expected["quiz_heading"], exact=True).count() > 0, (
+                    f'Quiz tab did not render in {language}'
+                )
+                assert page.get_by_text(expected["guide"], exact=True).count() > 0, (
+                    f'Quiz navigation changed unexpectedly for {language}'
+                )
+                page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-quiz.png"), full_page=True)
+                print(f"PASS {language}: analysis, prevention, custom rules and quiz rendered")
             browser.close()
     finally:
         process.terminate()
