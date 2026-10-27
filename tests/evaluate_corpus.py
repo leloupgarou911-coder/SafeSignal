@@ -1,6 +1,12 @@
 """Evaluate the fixed, synthetic message corpus; this is not a real-world accuracy estimate."""
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from core.detector import analyze_message
 
 CASES = json.loads((Path(__file__).parent / "fixtures" / "messages.json").read_text(encoding="utf-8"))
