@@ -314,7 +314,9 @@ with about_tab:
     st.caption(T["calibration_intro"])
     st.warning(T["calibration_note"])
     if st.button(T["calibration_button"], key="evaluate_synthetic_corpus"):
-        calibration = evaluate_synthetic_corpus()
+        st.session_state["calibration_report"] = evaluate_synthetic_corpus()
+    calibration = st.session_state.get("calibration_report")
+    if calibration:
         def display_rate(value):
             return "—" if value is None else f"{value:.1%}"
         metric_columns = st.columns(4)
