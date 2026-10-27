@@ -61,7 +61,7 @@
   "quiz_incorrect": "Not quite.",
   "ocr_tab": "🖼️ Local OCR",
   "ocr_title": "Read text from a screenshot",
-  "ocr_privacy": "The image is processed on this device and is not sent to an API or saved by SafeSignal. This feature requires Tesseract to be installed locally.",
+  "ocr_privacy": "The image is processed by the SafeSignal instance running the app, without an external API, and is not saved to the database. It remains temporarily available in the session while you use the feature.",
   "ocr_upload": "Choose a screenshot",
   "ocr_upload_help": "Accepted formats: PNG, JPG/JPEG and WebP. Maximum size: 8 MB.",
   "ocr_language": "Language in the image",
