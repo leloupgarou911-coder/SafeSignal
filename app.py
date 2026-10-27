@@ -7,6 +7,7 @@ import streamlit as st
 from core.detector import analyze_message
 from core.language import detect_language
 from core.explain import LIBRARY
+from core.prevention import get_guides
 from db.storage import init_db, save_analysis, list_history, clear_history
 
 ROOT = Path(__file__).parent
@@ -41,7 +42,7 @@ try:
 except (sqlite3.Error, OSError):
     DB_READY = False
 
-st.set_page_config(page_title="SafeSignal", page_icon="🛡️", layout="centered")
+st.set_page_config(page_title="SafeSignal", page_icon="🛡️", layout="wide")
 LANGS = {"Français": "fr", "English": "en", "العربية": "ar"}
 label = st.sidebar.selectbox("Interface language / لغة الواجهة", list(LANGS))
 lang = LANGS[label]
@@ -49,13 +50,16 @@ T = json.loads((ROOT / "i18n" / f"{lang}.json").read_text(encoding="utf-8"))
 E = ERRORS[lang]
 HL = HISTORY_LABELS[lang]
 direction = "rtl" if lang == "ar" else "ltr"
+text_align = "right" if lang == "ar" else "left"
 st.markdown(f"""<style>
 html, body, [data-testid="stAppViewContainer"] {{ direction: {direction}; }}
-.block-container {{ max-width:900px; padding-top:2rem; }}
-.stTextArea textarea, .stTextInput input {{ direction: {direction}; text-align: {'right' if lang == 'ar' else 'left'}; }}
-[data-testid="stTabs"] [role="tablist"] {{ direction: {direction}; }}
-[data-testid="stMarkdownContainer"], [data-testid="stCaptionContainer"] {{ text-align: {'right' if lang == 'ar' else 'left'}; }}
-.trust {{ padding:1rem; border-radius:12px; background:#eaf5ff; border:1px solid #b7dcfa; color:#12344d; text-align:{'right' if lang == 'ar' else 'left'}; }}
+.block-container {{ max-width:1200px; padding-top:2rem; padding-bottom:3rem; }}
+.stTextArea textarea, .stTextInput input {{ direction: {direction}; text-align: {text_align}; }}
+[data-testid="stTabs"] [role="tablist"] {{ direction: {direction}; gap:.35rem; }}
+[data-testid="stMarkdownContainer"], [data-testid="stCaptionContainer"] {{ text-align: {text_align}; }}
+.trust {{ padding:1rem 1.15rem; border-radius:14px; background:#eaf5ff; border:1px solid #b7dcfa; color:#12344d; text-align:{text_align}; margin:.6rem 0 1.2rem; }}
+div[data-testid="stVerticalBlockBorderWrapper"] {{ border-color:#d7e7f5; border-radius:14px; }}
+.guide-example {{ border-radius:10px; padding:.8rem; }}
 </style>""", unsafe_allow_html=True)
 st.title("🛡️ SafeSignal")
 st.caption(T["tagline"])
@@ -63,7 +67,7 @@ st.markdown(f'<div class="trust">🔒 <b>{T["privacy_title"]}</b><br>{T["privacy
 if not DB_READY:
     st.error(E["storage"])
 
-a, b, c, d = st.tabs([T["analyze"], T["library"], T["history"], T["about"]])
+a, b, p, c, d = st.tabs([T["analyze"], T["library"], T["prevention"], T["history"], T["about"]])
 with a:
     st.subheader(T["paste_title"])
     message = st.text_area(T["paste_label"], height=190, max_chars=20000, placeholder=T["placeholder"])
@@ -112,6 +116,30 @@ with b:
             st.write(item["description"])
             st.markdown(f'**{T["how_to_spot"]}** {item["spot"]}')
             st.markdown(f'**{T["what_to_do"]}** {item["action"]}')
+with p:
+    st.subheader(T["prevention"])
+    st.caption(T["prevention_intro"])
+    guides = get_guides(lang)
+    columns = st.columns(2)
+    for index, guide in enumerate(guides):
+        with columns[index % 2]:
+            with st.container(border=True):
+                st.markdown(f'### {guide["icon"]} {guide["title"]}')
+                st.write(guide["summary"])
+                with st.expander(T["checklist_title"], expanded=False):
+                    for item_index, item in enumerate(guide["checklist"]):
+                        st.checkbox(
+                            item,
+                            key=f'guide_{lang}_{guide["id"]}_{item_index}',
+                        )
+                left, right = st.columns(2)
+                with left:
+                    st.markdown(f'**{guide["legit_label"]}**')
+                    st.success(guide["legit"], icon="✅")
+                with right:
+                    st.markdown(f'**{guide["scam_label"]}**')
+                    st.warning(guide["scam"], icon="⚠️")
+    st.info(T["prevention_reminder"])
 with c:
     st.subheader(T["history"])
     st.caption(T["history_local"])
