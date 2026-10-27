@@ -129,7 +129,7 @@ def main():
                 )
                 # A checked consent box must also reset, without saving the test text.
                 message_box.fill("Must-not-be-saved reset test")
-                consent_box.check()
+                consent_box.check(force=True)
                 page.get_by_role("button", name=expected["clear_message"]).click()
                 page.wait_for_timeout(200)
                 assert message_box.input_value() == "", f'Message was not cleared for {language}'
