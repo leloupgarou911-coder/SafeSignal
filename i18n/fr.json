@@ -58,5 +58,20 @@
   "quiz_scam": "⚠️ Probablement suspect",
   "quiz_legitimate": "✅ Moins suspect",
   "quiz_correct": "Bonne réponse !",
-  "quiz_incorrect": "Pas tout à fait."
+  "quiz_incorrect": "Pas tout à fait.",
+  "ocr_tab": "🖼️ OCR local",
+  "ocr_title": "Lire le texte d’une capture d’écran",
+  "ocr_privacy": "L’image est traitée sur cet appareil et n’est ni envoyée à une API ni enregistrée par SafeSignal. Cette fonction nécessite Tesseract installé localement.",
+  "ocr_upload": "Choisissez une capture d’écran",
+  "ocr_upload_help": "Formats acceptés : PNG, JPG/JPEG et WebP. Taille maximale : 8 Mo.",
+  "ocr_language": "Langue du texte dans l’image",
+  "ocr_french": "Français",
+  "ocr_english": "Anglais",
+  "ocr_arabic": "Arabe (avec texte latin éventuel)",
+  "ocr_preview": "Aperçu de l’image",
+  "ocr_button": "Extraire le texte hors ligne",
+  "ocr_unavailable": "OCR indisponible :",
+  "ocr_result": "Texte extrait (vous pouvez le copier dans l’onglet Analyser)",
+  "ocr_copy_hint": "Relisez le texte extrait : l’OCR peut confondre des caractères, chiffres ou liens.",
+  "ocr_no_text": "Aucun texte n’a été reconnu. Essayez une image plus nette ou une autre langue."
 }
