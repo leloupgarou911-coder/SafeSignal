@@ -82,5 +82,89 @@
     "label": "benign",
     "text": "Hi, see you tomorrow at the library.",
     "expected_rule": null
+  },
+  {
+    "id": "fr_05",
+    "language": "fr",
+    "label": "benign",
+    "text": "Notification : votre paiement a bien été effectué. Merci d’utiliser notre service.",
+    "expected_rule": null
+  },
+  {
+    "id": "fr_06",
+    "language": "fr",
+    "label": "benign",
+    "text": "Rappel : votre rendez-vous est demain à 10 h. Consultez votre espace habituel.",
+    "expected_rule": null
+  },
+  {
+    "id": "fr_07",
+    "language": "fr",
+    "label": "suspicious",
+    "text": "Dernier avertissement : votre compte sera suspendu, vérifiez vos données maintenant.",
+    "expected_rule": "threat"
+  },
+  {
+    "id": "fr_08",
+    "language": "fr",
+    "label": "suspicious",
+    "text": "Vous avez gagné un cadeau gratuit, cliquez pour réclamer votre récompense.",
+    "expected_rule": "reward"
+  },
+  {
+    "id": "ar_dz_05",
+    "language": "ar-DZ",
+    "label": "benign",
+    "text": "تنبيه: تم الدفع بنجاح، شكراً على استعمال الخدمة.",
+    "expected_rule": null
+  },
+  {
+    "id": "ar_dz_06",
+    "language": "ar-DZ",
+    "label": "benign",
+    "text": "تذكير: موعدك غدوة مع العشرة، شوف التطبيق الرسمي كي تحتاج.",
+    "expected_rule": null
+  },
+  {
+    "id": "ar_dz_07",
+    "language": "ar-DZ",
+    "label": "suspicious",
+    "text": "آخر إنذار، راح يتوقف حسابك، ابعث رمز التحقق الآن.",
+    "expected_rule": "threat"
+  },
+  {
+    "id": "ar_dz_08",
+    "language": "ar-DZ",
+    "label": "suspicious",
+    "text": "مبروك ربحت جائزة، اضغط هنا باش تستلم الهدية المجانية.",
+    "expected_rule": "reward"
+  },
+  {
+    "id": "en_05",
+    "language": "en",
+    "label": "benign",
+    "text": "Notification: your payment was completed successfully. Thank you for using our service.",
+    "expected_rule": null
+  },
+  {
+    "id": "en_06",
+    "language": "en",
+    "label": "benign",
+    "text": "Reminder: your appointment is tomorrow at 10 AM. Open your usual app if needed.",
+    "expected_rule": null
+  },
+  {
+    "id": "en_07",
+    "language": "en",
+    "label": "suspicious",
+    "text": "Final warning: your account will be closed. Verify your details now.",
+    "expected_rule": "threat"
+  },
+  {
+    "id": "en_08",
+    "language": "en",
+    "label": "suspicious",
+    "text": "Congratulations, you won a free gift. Claim your prize today.",
+    "expected_rule": "reward"
   }
 ]
