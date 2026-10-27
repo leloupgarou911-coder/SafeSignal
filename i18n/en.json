@@ -86,5 +86,7 @@
   "calibration_counts": "TP: {tp} · FP: {fp} · TN: {tn} · FN: {fn}",
   "skip_to_content": "Skip to main content",
   "message_help": "Paste the text to inspect. It stays in the session unless you explicitly choose to save it.",
-  "ocr_language_help": "Choose the main language shown in the screenshot. The extracted text may contain errors."
+  "ocr_language_help": "Choose the main language shown in the screenshot. The extracted text may contain errors.",
+  "clear_message": "Reset message and result",
+  "ocr_clear": "Reset OCR image and extracted text"
 }
