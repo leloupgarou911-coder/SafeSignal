@@ -94,12 +94,17 @@ def main():
                     f'Unexpected text direction for {language}: {direction}'
                 )
                 tabs = page.get_by_role("tab")
+                selected_tabs = page.locator('[role="tab"][aria-selected="true"]')
+                before_selected = selected_tabs.first.inner_text()
                 tabs.nth(0).focus()
                 page.keyboard.press("ArrowRight")
                 page.wait_for_timeout(150)
                 selected_tabs = page.locator('[role="tab"][aria-selected="true"]')
                 assert selected_tabs.count() == 1, f'Keyboard tab navigation failed for {language}'
                 assert selected_tabs.first.get_attribute("aria-selected") == "true"
+                assert selected_tabs.first.inner_text() != before_selected, (
+                    f'Arrow-key navigation did not change the active tab for {language}'
+                )
                 page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-analysis.png"), full_page=True)
                 tab = page.get_by_role("tab", name=expected["prevention_tab"])
                 tab.click()
