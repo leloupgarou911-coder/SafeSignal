@@ -13,6 +13,7 @@ URL = "http://127.0.0.1:8501"
 EXPECTED = {
     "Français": {
         "heading": "Examinez un message",
+        "ocr_tab": "🖼️ OCR local", "about_tab": "À propos", "skip_link": "Aller au contenu principal",
         "prevention_tab": "Conseils & Prévention",
         "guide": "Phishing / hameçonnage",
         "rules_tab": "⚙️ Mes règles", "rules_heading": "Gérer mes règles d’alerte personnalisées",
@@ -21,6 +22,7 @@ EXPECTED = {
     },
     "English": {
         "heading": "Check a message",
+        "ocr_tab": "🖼️ Local OCR", "about_tab": "About", "skip_link": "Skip to main content",
         "prevention_tab": "Advice & Prevention",
         "guide": "Phishing and credential theft",
         "rules_tab": "⚙️ My rules", "rules_heading": "Manage my custom alert rules",
@@ -29,6 +31,7 @@ EXPECTED = {
     },
     "العربية": {
         "heading": "افحص رسالة",
+        "ocr_tab": "🖼️ استخراج النص محلياً", "about_tab": "حول التطبيق", "skip_link": "انتقل إلى المحتوى الرئيسي",
         "prevention_tab": "النصائح والوقاية",
         "guide": "التصيد الاحتيالي وسرقة بيانات الدخول",
         "rules_tab": "⚙️ قواعدي", "rules_heading": "إدارة قواعد التنبيه المخصصة",
@@ -77,6 +80,26 @@ def main():
                 assert page.get_by_text(expected["heading"], exact=True).count() > 0, (
                     f'Expected translated heading not found for {language}'
                 )
+                assert page.get_by_role("link", name=expected["skip_link"]).count() == 1, (
+                    f'Skip-to-content link is missing or untranslated for {language}'
+                )
+                assert page.get_by_role("tab", name=expected["ocr_tab"]).count() == 1, (
+                    f'OCR tab has no accessible translated name for {language}'
+                )
+                assert page.get_by_role("tab", name=expected["about_tab"]).count() == 1, (
+                    f'About tab has no accessible translated name for {language}'
+                )
+                direction = page.locator("html").evaluate("(node) => getComputedStyle(node).direction")
+                assert direction == ("rtl" if language == "العربية" else "ltr"), (
+                    f'Unexpected text direction for {language}: {direction}'
+                )
+                tabs = page.get_by_role("tab")
+                tabs.nth(0).focus()
+                page.keyboard.press("ArrowRight")
+                page.wait_for_timeout(150)
+                selected_tabs = page.locator('[role="tab"][aria-selected="true"]')
+                assert selected_tabs.count() == 1, f'Keyboard tab navigation failed for {language}'
+                assert selected_tabs.first.get_attribute("aria-selected") == "true"
                 page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-analysis.png"), full_page=True)
                 tab = page.get_by_role("tab", name=expected["prevention_tab"])
                 tab.click()
