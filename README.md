@@ -38,7 +38,7 @@ cd SafeSignal
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install -e .
 streamlit run app.py
 ```
 
@@ -50,11 +50,23 @@ cd SafeSignal
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install -e .
 streamlit run app.py
 ```
 
 Streamlit affiche une adresse locale (généralement `http://localhost:8501`). Ouvrez-la dans votre navigateur. Pour arrêter le serveur, utilisez `Ctrl+C` dans le terminal.
+
+## Utilisation en ligne de commande
+
+Après l'installation en mode éditable (`python -m pip install -e .`), analysez un message depuis le terminal :
+
+```bash
+python -m safesignal --text "URGENT: verify your account now" --language en
+```
+
+Vous pouvez aussi utiliser `python -m safesignal --file message.txt`, transmettre un fichier via l'entrée standard (`cat message.txt | python -m safesignal`), ou demander du JSON avec `--json`. La commande `safesignal --help` liste les options. `--verbose` active les journaux de diagnostic. Le code de sortie est non nul si l'entrée est invalide ou si une erreur empêche l'analyse.
+
+Pour déplacer la base SQLite, définissez `SAFESIGNAL_DB_PATH` avant de lancer l'application. Aucun secret ou service distant n'est nécessaire.
 
 ## Utilisation hors ligne et données
 
