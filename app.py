@@ -65,9 +65,6 @@ def _clear_ocr_session():
     st.session_state.pop("ocr_error", None)
 
 
-st.session_state.setdefault("analysis_form_version", 0)
-st.session_state.setdefault("ocr_upload_version", 0)
-
 try:
     init_db()
     DB_READY = True
@@ -75,6 +72,9 @@ except (sqlite3.Error, OSError):
     DB_READY = False
 
 st.set_page_config(page_title="SafeSignal", page_icon="🛡️", layout="wide")
+st.session_state.setdefault("analysis_form_version", 0)
+st.session_state.setdefault("ocr_upload_version", 0)
+
 LANGS = {"Français": "fr", "English": "en", "العربية": "ar"}
 label = st.sidebar.selectbox(
     "Langue de l’interface / Interface language / لغة الواجهة",
