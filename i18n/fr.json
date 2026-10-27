@@ -86,5 +86,7 @@
   "calibration_counts": "TP : {tp} · FP : {fp} · TN : {tn} · FN : {fn}",
   "skip_to_content": "Aller au contenu principal",
   "message_help": "Collez le texte à examiner. Il reste dans la session sauf si vous choisissez explicitement de l’enregistrer.",
-  "ocr_language_help": "Choisissez la langue principale visible dans la capture. Le résultat peut contenir des erreurs."
+  "ocr_language_help": "Choisissez la langue principale visible dans la capture. Le résultat peut contenir des erreurs.",
+  "clear_message": "Réinitialiser la zone de texte",
+  "ocr_clear": "Réinitialiser l’outil OCR"
 }
