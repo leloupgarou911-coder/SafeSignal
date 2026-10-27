@@ -30,6 +30,11 @@ ERRORS = {
         "history": "تعذرت قراءة السجل المحلي أو تعديله. تحقق من صلاحيات المجلد.",
     },
 }
+HISTORY_LABELS = {
+    "fr": {"language": "Langue du rapport", "alerts": "Indices détectés", "message": "Message analysé", "details": "Détails"},
+    "en": {"language": "Report language", "alerts": "Signals detected", "message": "Analyzed message", "details": "Details"},
+    "ar": {"language": "لغة التقرير", "alerts": "المؤشرات المكتشفة", "message": "الرسالة التي تم تحليلها", "details": "التفاصيل"},
+}
 try:
     init_db()
     DB_READY = True
@@ -42,6 +47,7 @@ label = st.sidebar.selectbox("Interface language / لغة الواجهة", list(
 lang = LANGS[label]
 T = json.loads((ROOT / "i18n" / f"{lang}.json").read_text(encoding="utf-8"))
 E = ERRORS[lang]
+HL = HISTORY_LABELS[lang]
 direction = "rtl" if lang == "ar" else "ltr"
 st.markdown(f"""<style>
 html, body, [data-testid="stAppViewContainer"] {{ direction: {direction}; }}
@@ -118,11 +124,27 @@ with c:
                 st.write(T["history_empty"])
             for row in rows:
                 with st.expander(f'{row["created_at"]} · {row["summary"]}'):
-                    st.write(row["report"])
+                    saved_report = json.loads(row["report"])
+                    st.caption(
+                        f'{HL["language"]}: {saved_report.get("language", "fr").upper()} · '
+                        f'{HL["alerts"]}: {len(saved_report.get("findings", []))}'
+                    )
+                    if row.get("original_text"):
+                        st.markdown(f'**{HL["message"]}**')
+                        st.text(row["original_text"])
+                    st.markdown(f'**{HL["details"]}**')
+                    findings = saved_report.get("findings", [])
+                    if not findings:
+                        st.success(T["no_signals"])
+                    for finding in findings:
+                        with st.expander(finding.get("title", finding.get("rule_id", "Signal"))):
+                            st.write(finding.get("explanation", ""))
+                            if finding.get("advice"):
+                                st.markdown(f'**{T["advice"]}** {finding["advice"]}')
             if rows and st.button(T["clear_history"]):
                 clear_history()
                 st.rerun()
-        except sqlite3.Error:
+        except (sqlite3.Error, ValueError, TypeError, KeyError):
             st.error(E["history"])
 with d:
     st.subheader(T["about"])
