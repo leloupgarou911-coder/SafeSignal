@@ -8,6 +8,7 @@ from .rules.formatting import RULES as FORMATTING
 from .rules.regional import RULES as REGIONAL
 from .rules.financial_indicators import RULES as FINANCIAL
 from .rules.social_engineering import RULES as SOCIAL_ENGINEERING
+from .rules.domain_similarity import analyze_suspicious_domains
 
 # Ajouter une famille de règles ici sans modifier l'algorithme d'analyse.
 RULES = (
@@ -61,6 +62,8 @@ def analyze_message(text: str, language: str = "fr", custom_rules=None) -> dict:
                 "confidence": "low",
                 "evidence": "« " + keyword[:100] + " »",
             })
+    # Local domain lookalike checks; no DNS lookup or network request is made.
+    findings.extend(analyze_suspicious_domains(text, language))
     for rule in RULES:
         match = rule.pattern.search(text)
         if match:
