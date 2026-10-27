@@ -1,0 +1,86 @@
+[
+  {
+    "id": "fr_01",
+    "language": "fr",
+    "label": "suspicious",
+    "text": "Alerte : votre compte BaridiMob est bloqué. Confirmez votre code secret immédiatement.",
+    "expected_rule": "regional_payment_impersonation"
+  },
+  {
+    "id": "fr_02",
+    "language": "fr",
+    "label": "suspicious",
+    "text": "Votre colis est bloqué, frais de livraison à payer pour le recevoir.",
+    "expected_rule": "delivery_fee"
+  },
+  {
+    "id": "fr_03",
+    "language": "fr",
+    "label": "benign",
+    "text": "J'utilise BaridiMob pour consulter mes opérations chaque semaine.",
+    "expected_rule": null
+  },
+  {
+    "id": "fr_04",
+    "language": "fr",
+    "label": "benign",
+    "text": "Bonjour, on se retrouve demain à la bibliothèque.",
+    "expected_rule": null
+  },
+  {
+    "id": "ar_dz_01",
+    "language": "ar-DZ",
+    "label": "suspicious",
+    "text": "حسابك في بريدي موب راهو موقوف، ابعث رمز التحقق فوراً.",
+    "expected_rule": "regional_payment_impersonation"
+  },
+  {
+    "id": "ar_dz_02",
+    "language": "ar-DZ",
+    "label": "suspicious",
+    "text": "طردك متوقف، خلص رسوم التوصيل وأكد العنوان.",
+    "expected_rule": "delivery_fee"
+  },
+  {
+    "id": "ar_dz_03",
+    "language": "ar-DZ",
+    "label": "benign",
+    "text": "نستعمل بريدي موب باش نشوف الرصيد تاعي.",
+    "expected_rule": null
+  },
+  {
+    "id": "ar_dz_04",
+    "language": "ar-DZ",
+    "label": "benign",
+    "text": "سلام، نلتقاو غدوة قدام الجامعة.",
+    "expected_rule": null
+  },
+  {
+    "id": "en_01",
+    "language": "en",
+    "label": "suspicious",
+    "text": "Your BaridiMob account is blocked. Verify your secret code immediately.",
+    "expected_rule": "regional_payment_impersonation"
+  },
+  {
+    "id": "en_02",
+    "language": "en",
+    "label": "suspicious",
+    "text": "Your parcel is on hold. Pay a delivery fee to release it.",
+    "expected_rule": "delivery_fee"
+  },
+  {
+    "id": "en_03",
+    "language": "en",
+    "label": "benign",
+    "text": "I use BaridiMob to check my balance every Friday.",
+    "expected_rule": null
+  },
+  {
+    "id": "en_04",
+    "language": "en",
+    "label": "benign",
+    "text": "Hi, see you tomorrow at the library.",
+    "expected_rule": null
+  }
+]
