@@ -11,10 +11,23 @@ ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = ROOT / "artifacts" / "streamlit"
 URL = "http://127.0.0.1:8501"
 EXPECTED = {
-    "Français": "Examinez un message",
-    "English": "Check a message",
-    "العربية": "افحص رسالة",
+    "Français": {
+        "heading": "Examinez un message",
+        "prevention_tab": "Conseils & Prévention",
+        "guide": "Phishing / hameçonnage",
+    },
+    "English": {
+        "heading": "Check a message",
+        "prevention_tab": "Advice & Prevention",
+        "guide": "Phishing and credential theft",
+    },
+    "العربية": {
+        "heading": "افحص رسالة",
+        "prevention_tab": "النصائح والوقاية",
+        "guide": "التصيد الاحتيالي وسرقة بيانات الدخول",
+    },
 }
+
 
 def wait_for_server(process):
     for _ in range(60):
@@ -26,6 +39,7 @@ def wait_for_server(process):
         except Exception:
             time.sleep(1)
     raise RuntimeError("Streamlit did not become ready")
+
 
 def main():
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
@@ -45,17 +59,24 @@ def main():
             page = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
             page.goto(URL, wait_until="networkidle")
             page.wait_for_timeout(900)
-            for index, (language, expected_text) in enumerate(EXPECTED.items()):
+            for index, (language, expected) in enumerate(EXPECTED.items()):
                 if index:
                     selector = page.locator('[data-testid="stSidebar"] [data-testid="stSelectbox"]')
                     selector.click()
                     page.get_by_text(language, exact=True).last.click()
                     page.wait_for_timeout(900)
-                assert page.get_by_text(expected_text, exact=True).count() > 0, (
-                    f"Expected translated heading not found for {language}"
+                assert page.get_by_text(expected["heading"], exact=True).count() > 0, (
+                    f'Expected translated heading not found for {language}'
                 )
-                page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}.png"), full_page=True)
-                print(f"PASS {language}: heading rendered; screenshot saved")
+                page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-analysis.png"), full_page=True)
+                tab = page.get_by_role("tab", name=expected["prevention_tab"])
+                tab.click()
+                page.wait_for_timeout(400)
+                assert page.get_by_text(expected["guide"], exact=True).count() > 0, (
+                    f'Prevention guide did not render in {language}'
+                )
+                page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-prevention.png"), full_page=True)
+                print(f"PASS {language}: analysis and prevention guide rendered")
             browser.close()
     finally:
         process.terminate()
@@ -64,6 +85,7 @@ def main():
         except subprocess.TimeoutExpired:
             process.kill()
     print(f"Screenshots: {ARTIFACTS}")
+
 
 if __name__ == "__main__":
     main()
