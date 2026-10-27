@@ -4,7 +4,7 @@ SafeSignal est une application Streamlit qui analyse localement des SMS, e-mails
 
 ## Fonctionnalités V1
 - Moteur local et explicable, sans API externe obligatoire.
-- Sept familles de règles : urgence, récompense inattendue, liens raccourcis/présents, données sensibles, mention d'organismes connus, menaces/pression, typographie inhabituelle.
+- Règles modulaires : urgence, récompense inattendue, liens raccourcis/présents, données sensibles, organismes connus, menaces/pression, typographie inhabituelle, services de paiement locaux (ex. BaridiMob/Edahabia/CCP) et frais de livraison suspects.
 - Interface et fiches pédagogiques en français, anglais et arabe.
 - Historique SQLite désactivé par défaut ; le texte original n'est stocké qu'après consentement explicite.
 - Historique effaçable et tests automatisés.
