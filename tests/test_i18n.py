@@ -39,7 +39,7 @@ class TranslationTests(unittest.TestCase):
         self.assertEqual(self.translations["ar"]["ocr_clear"], "إعادة ضبط أداة استخراج النص")
         for key in ("clear_message", "ocr_clear"):
             with self.subTest(key=key):
-                self.assertTrue(any("\\u0600" <= char <= "\\u06FF" for char in self.translations["ar"][key]))
+                self.assertTrue(any("\u0600" <= char <= "\u06FF" for char in self.translations["ar"][key]))
 
     def test_format_placeholders_match_between_languages(self):
         def placeholders(value):
