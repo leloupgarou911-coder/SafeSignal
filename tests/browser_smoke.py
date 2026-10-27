@@ -74,8 +74,8 @@ def main():
             for index, (language, expected) in enumerate(EXPECTED.items()):
                 if index:
                     selector = page.locator('[data-testid="stSidebar"] [data-testid="stSelectbox"]')
-                    selector.click()
-                    page.get_by_text(language, exact=True).last.click()
+                    selector.get_by_role("combobox").click()
+                    page.get_by_role("option", name=language, exact=True).click()
                     page.wait_for_timeout(900)
                 assert page.get_by_text(expected["heading"], exact=True).count() > 0, (
                     f'Expected translated heading not found for {language}'
