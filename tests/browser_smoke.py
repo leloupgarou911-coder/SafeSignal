@@ -21,6 +21,11 @@ EXPECTED = {
         "rules_tab": "⚙️ Mes règles", "rules_heading": "Gérer mes règles d’alerte personnalisées",
         "quiz_tab": "🎮 Quiz réflexes", "quiz_heading": "Testez vos réflexes anti-arnaque",
         "quiz_example": "Alerte sécurité : votre accès sera suspendu ce soir. Confirmez vos identifiants via ce lien inconnu.",
+        "analyze_button": "Analyser le message",
+        "report_title": "Rapport d’analyse",
+        "clear_message": "Réinitialiser la zone de texte",
+        "ocr_clear": "Réinitialiser l’outil OCR",
+        "ocr_preview": "Aperçu de l’image",
     },
     "English": {
         "heading": "Check a message",
@@ -32,6 +37,11 @@ EXPECTED = {
         "rules_tab": "⚙️ My rules", "rules_heading": "Manage my custom alert rules",
         "quiz_tab": "🎮 Scam-awareness quiz", "quiz_heading": "Test your scam-awareness reflexes",
         "quiz_example": "Security alert: your access will be suspended tonight. Confirm your login through this unfamiliar link.",
+        "analyze_button": "Analyze message",
+        "report_title": "Analysis report",
+        "clear_message": "Reset message and result",
+        "ocr_clear": "Reset OCR image and extracted text",
+        "ocr_preview": "Image preview",
     },
     "العربية": {
         "heading": "افحص رسالة",
@@ -43,6 +53,11 @@ EXPECTED = {
         "rules_tab": "⚙️ قواعدي", "rules_heading": "إدارة قواعد التنبيه المخصصة",
         "quiz_tab": "🎮 اختبار اليقظة", "quiz_heading": "اختبر قدرتك على تمييز الاحتيال",
         "quiz_example": "تنبيه أمني: سيتم تعليق دخولك الليلة. أكد بيانات الدخول عبر هذا الرابط غير المعروف.",
+        "analyze_button": "تحليل الرسالة",
+        "report_title": "تقرير التحليل",
+        "clear_message": "إعادة ضبط حقل الرسالة",
+        "ocr_clear": "إعادة ضبط أداة استخراج النص",
+        "ocr_preview": "معاينة الصورة",
     },
 }
 
@@ -97,6 +112,47 @@ def main():
                 assert page.get_by_role("checkbox", name=expected["save_option"]).count() == 1, (
                     f'Consent checkbox has no accessible name for {language}'
                 )
+                # Verify the message reset in the real browser: text, consent, and report are cleared.
+                message_box = page.get_by_role("textbox", name=expected["paste_label"])
+                consent_box = page.get_by_role("checkbox", name=expected["save_option"])
+                message_box.fill("Private reset smoke-test message")
+                consent_box.check()
+                consent_box.uncheck()
+                page.get_by_role("button", name=expected["analyze_button"]).click()
+                assert page.get_by_text(expected["report_title"], exact=True).count() == 1, (
+                    f'Analysis report was not displayed for {language}'
+                )
+                page.get_by_role("button", name=expected["clear_message"]).click()
+                page.wait_for_timeout(200)
+                assert message_box.input_value() == "", f'Message was not cleared for {language}'
+                assert not consent_box.is_checked(), f'Consent was not reset for {language}'
+                assert page.get_by_text(expected["report_title"], exact=True).count() == 0, (
+                    f'Analysis report remained after reset for {language}'
+                )
+
+                # Upload a tiny in-memory PNG and verify the OCR reset removes its preview.
+                page.get_by_role("tab", name=expected["ocr_tab"]).click()
+                page.wait_for_timeout(200)
+                upload = page.locator('input[type="file"]').first
+                import base64
+                upload.set_input_files({
+                    "name": "privacy-smoke.png",
+                    "mimeType": "image/png",
+                    "buffer": base64.b64decode(
+                        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/XuoAAAAASUVORK5CYII="
+                    ),
+                })
+                page.wait_for_timeout(250)
+                assert page.get_by_text(expected["ocr_preview"], exact=True).count() == 1, (
+                    f'OCR image preview did not appear for {language}'
+                )
+                page.get_by_role("button", name=expected["ocr_clear"]).click()
+                page.wait_for_timeout(200)
+                assert page.get_by_text(expected["ocr_preview"], exact=True).count() == 0, (
+                    f'OCR preview remained after reset for {language}'
+                )
+                page.get_by_role("tab", name=expected["about_tab"]).click()
+                page.wait_for_timeout(150)
                 assert page.get_by_role("tab", name=expected["ocr_tab"]).count() == 1, (
                     f'OCR tab has no accessible translated name for {language}'
                 )
