@@ -115,9 +115,7 @@ def main():
                 # Verify the message reset in the real browser: text, consent, and report are cleared.
                 message_box = page.get_by_role("textbox", name=expected["paste_label"])
                 consent_box = page.get_by_role("checkbox", name=expected["save_option"])
-                message_box.fill("Private reset smoke-test message")
-                consent_box.check()
-                consent_box.uncheck()
+                message_box.fill("Non-consented browser reset smoke-test message")
                 page.get_by_role("button", name=expected["analyze_button"]).click()
                 assert page.get_by_text(expected["report_title"], exact=True).count() == 1, (
                     f'Analysis report was not displayed for {language}'
@@ -129,6 +127,13 @@ def main():
                 assert page.get_by_text(expected["report_title"], exact=True).count() == 0, (
                     f'Analysis report remained after reset for {language}'
                 )
+                # A checked consent box must also reset, without saving the test text.
+                message_box.fill("Must-not-be-saved reset test")
+                consent_box.check()
+                page.get_by_role("button", name=expected["clear_message"]).click()
+                page.wait_for_timeout(200)
+                assert message_box.input_value() == "", f'Message was not cleared for {language}'
+                assert not consent_box.is_checked(), f'Consent was not reset for {language}'
 
                 # Upload a tiny in-memory PNG and verify the OCR reset removes its preview.
                 page.get_by_role("tab", name=expected["ocr_tab"]).click()
