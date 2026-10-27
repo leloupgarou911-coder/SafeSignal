@@ -44,6 +44,34 @@ class DetectorTests(unittest.TestCase):
         self.assertEqual(item["severity"], "low")
         self.assertIn("contexte", item["explanation"])
 
+    def test_detects_fake_tech_support_in_french_english_arabic(self):
+        examples = [
+            ("Alerte virus : votre ordinateur est bloqué, appelez ce numéro immédiatement", "fr"),
+            ("Virus detected: your computer is locked, call this number now", "en"),
+            ("فيروس، جهازك مغلق، اتصل الآن برقم الدعم", "ar"),
+        ]
+        for message, language in examples:
+            with self.subTest(language=language):
+                findings = analyze_message(message, language)["findings"]
+                self.assertIn("fake_tech_support", [item["rule_id"] for item in findings])
+
+    def test_detects_official_impersonation_with_payment_pressure(self):
+        examples = [
+            ("Votre colis est bloqué, payez les frais de douane", "fr"),
+            ("Your package is on hold. Pay customs fee now.", "en"),
+            ("طرد محجوز، ادفع رسوم الجمارك", "ar"),
+        ]
+        for message, language in examples:
+            with self.subTest(language=language):
+                findings = analyze_message(message, language)["findings"]
+                self.assertIn("official_impersonation_request", [item["rule_id"] for item in findings])
+
+    def test_brand_name_alone_is_not_fake_support_or_impersonation(self):
+        findings = analyze_message("I use Microsoft and Apple products every day.", "en")["findings"]
+        rule_ids = [item["rule_id"] for item in findings]
+        self.assertNotIn("fake_tech_support", rule_ids)
+        self.assertNotIn("official_impersonation_request", rule_ids)
+
     def test_short_link(self):
         self.assertIn("short_link", [x["rule_id"] for x in analyze_message("https://bit.ly/abc", "fr")["findings"]])
 
