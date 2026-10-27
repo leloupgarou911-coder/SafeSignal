@@ -17,6 +17,7 @@ EXPECTED = {
         "guide": "Phishing / hameçonnage",
         "rules_tab": "⚙️ Mes règles", "rules_heading": "Gérer mes règles d’alerte personnalisées",
         "quiz_tab": "🎮 Quiz réflexes", "quiz_heading": "Testez vos réflexes anti-arnaque",
+        "quiz_example": "Alerte sécurité : votre accès sera suspendu ce soir. Confirmez vos identifiants via ce lien inconnu.",
     },
     "English": {
         "heading": "Check a message",
@@ -24,6 +25,7 @@ EXPECTED = {
         "guide": "Phishing and credential theft",
         "rules_tab": "⚙️ My rules", "rules_heading": "Manage my custom alert rules",
         "quiz_tab": "🎮 Scam-awareness quiz", "quiz_heading": "Test your scam-awareness reflexes",
+        "quiz_example": "Security alert: your access will be suspended tonight. Confirm your login through this unfamiliar link.",
     },
     "العربية": {
         "heading": "افحص رسالة",
@@ -31,6 +33,7 @@ EXPECTED = {
         "guide": "التصيد الاحتيالي وسرقة بيانات الدخول",
         "rules_tab": "⚙️ قواعدي", "rules_heading": "إدارة قواعد التنبيه المخصصة",
         "quiz_tab": "🎮 اختبار اليقظة", "quiz_heading": "اختبر قدرتك على تمييز الاحتيال",
+        "quiz_example": "تنبيه أمني: سيتم تعليق دخولك الليلة. أكد بيانات الدخول عبر هذا الرابط غير المعروف.",
     },
 }
 
@@ -94,8 +97,8 @@ def main():
                 assert page.get_by_text(expected["quiz_heading"], exact=True).count() > 0, (
                     f'Quiz tab did not render in {language}'
                 )
-                assert page.get_by_text(expected["guide"], exact=True).count() > 0, (
-                    f'Quiz navigation changed unexpectedly for {language}'
+                assert page.get_by_text(expected["quiz_example"], exact=True).count() > 0, (
+                    f'Quiz question did not render in {language}'
                 )
                 page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-quiz.png"), full_page=True)
                 print(f"PASS {language}: analysis, prevention, custom rules and quiz rendered")
