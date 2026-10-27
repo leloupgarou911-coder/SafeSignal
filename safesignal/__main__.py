@@ -10,12 +10,11 @@ import sys
 from pathlib import Path
 from typing import Sequence
 
+from core.config import MAX_MESSAGE_LENGTH, SUPPORTED_LANGUAGES
 from core.detector import analyze_message
 from core.language import detect_language
 
 LOGGER = logging.getLogger("safesignal")
-MAX_MESSAGE_LENGTH = 20_000
-SUPPORTED_LANGUAGES = ("fr", "en", "ar")
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -57,7 +56,7 @@ def _read_message(args: argparse.Namespace, stdin=None) -> str:
 
 
 def _install_signal_handlers() -> None:
-    """Make Ctrl+C and termination exit cleanly; this CLI holds no long-lived resources."""
+    """Handle Ctrl+C and termination cleanly; the CLI holds no long-lived resources."""
     def stop(signum, _frame):
         raise KeyboardInterrupt(f"signal système {signum}")
 
