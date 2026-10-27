@@ -43,14 +43,14 @@ def main():
         with sync_playwright() as p:
             browser = p.chromium.launch()
             page = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
+            page.goto(URL, wait_until="networkidle")
+            page.wait_for_timeout(900)
             for index, (language, expected_text) in enumerate(EXPECTED.items()):
                 if index:
                     selector = page.locator('[data-testid="stSidebar"] [data-testid="stSelectbox"]')
                     selector.click()
                     page.get_by_text(language, exact=True).last.click()
                     page.wait_for_timeout(900)
-                page.goto(URL, wait_until="networkidle")
-                page.wait_for_timeout(500)
                 assert page.get_by_text(expected_text, exact=True).count() > 0, (
                     f"Expected translated heading not found for {language}"
                 )
