@@ -2,7 +2,6 @@ from .rules.urgency import RULES as URGENCY
 from .rules.reward import RULES as REWARD
 from .rules.links import RULES as LINKS
 from .rules.sensitive_data import RULES as DATA
-from .rules.impersonation import RULES as IDENTITY
 from .rules.pressure import RULES as PRESSURE
 from .rules.formatting import RULES as FORMATTING
 from .rules.regional import RULES as REGIONAL
@@ -12,7 +11,9 @@ from .rules.domain_similarity import analyze_suspicious_domains
 
 # Ajouter une famille de règles ici sans modifier l'algorithme d'analyse.
 RULES = (
-    URGENCY + REWARD + LINKS + DATA + IDENTITY + PRESSURE + FORMATTING
+    # Do not flag an organization name alone; contextual impersonation rules
+    # live in social_engineering.py and require an associated suspicious action.
+    URGENCY + REWARD + LINKS + DATA + PRESSURE + FORMATTING
     + REGIONAL + FINANCIAL + SOCIAL_ENGINEERING
 )
 
