@@ -80,8 +80,10 @@ def main():
                 assert page.get_by_text(expected["heading"], exact=True).count() > 0, (
                     f'Expected translated heading not found for {language}'
                 )
-                assert page.get_by_role("link", name=expected["skip_link"]).count() == 1, (
-                    f'Skip-to-content link is missing or untranslated for {language}'
+                skip_link = page.locator("a.skip-link")
+                assert skip_link.count() == 1, f'Skip-to-content link is missing for {language}'
+                assert skip_link.inner_text() == expected["skip_link"], (
+                    f'Skip-to-content link is untranslated for {language}: {skip_link.inner_text()}'
                 )
                 assert page.get_by_role("tab", name=expected["ocr_tab"]).count() == 1, (
                     f'OCR tab has no accessible translated name for {language}'
