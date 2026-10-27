@@ -13,7 +13,12 @@ LANGS={"Français":"fr","English":"en","العربية":"ar"}
 label=st.sidebar.selectbox("Interface language / لغة الواجهة",list(LANGS))
 lang=LANGS[label]
 T=json.loads((ROOT/"i18n"/f"{lang}.json").read_text(encoding="utf-8"))
-st.markdown("""<style>.block-container{max-width:900px;padding-top:2rem}.trust{padding:1rem;border-radius:12px;background:#eaf5ff;border:1px solid #b7dcfa;color:#12344d}.small{font-size:.92rem;color:#5c6670}</style>""",unsafe_allow_html=True)
+direction = "rtl" if lang == "ar" else "ltr"
+st.markdown(f"""<style>
+html, body, [data-testid="stAppViewContainer"] {{ direction: {direction}; }}
+.block-container {{ max-width:900px; padding-top:2rem; }}
+.trust {{ padding:1rem; border-radius:12px; background:#eaf5ff; border:1px solid #b7dcfa; color:#12344d; text-align:{'right' if lang == 'ar' else 'left'}; }}
+</style>""",unsafe_allow_html=True)
 st.title("🛡️ SafeSignal")
 st.caption(T["tagline"])
 st.markdown(f'<div class="trust">🔒 <b>{T["privacy_title"]}</b><br>{T["privacy_text"]}</div>',unsafe_allow_html=True)
