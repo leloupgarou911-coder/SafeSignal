@@ -6,7 +6,6 @@ The small trusted-domain list is illustrative and should be maintained carefully
 import re
 from urllib.parse import urlsplit
 
-from .base import Rule
 
 # Unicode confusables commonly used to imitate Latin letters. Deliberately limited:
 # transliterating all Unicode would create too many false positives.
@@ -26,7 +25,7 @@ TRUSTED_DOMAINS = {
     "edahabia.poste.dz",
 }
 
-_URL_RE = re.compile(r"(?i)(?:https?://|www\.)[^\s<>\\"']+|(?<![\w@])(?:[a-z0-9\u0080-\uffff-]+\.)+[a-z\u0080-\uffff]{2,}(?:/[^\s<>\\"']*)?")
+_URL_RE = re.compile(r"""(?i)(?:https?://|www\.)[^\s<>"']+|(?<![\w@])(?:[a-z0-9\u0080-\uffff-]+\.)+[a-z\u0080-\uffff]{2,}(?:/[^\s<>"']*)?""")
 
 
 def _host_from_candidate(candidate: str) -> str:
@@ -144,5 +143,3 @@ def analyze_suspicious_domains(text: str, language: str = "fr") -> list[dict]:
         findings.append(_finding(rule_id, language, candidate, official))
     return findings
 
-
-RULES = []
