@@ -12,8 +12,7 @@ class DetectorTests(unittest.TestCase):
 
     def test_keyword_dictionary_detects_french_phrases(self):
         findings = analyze_message("Dernière chance : votre compte suspendu, cliquez ici.", "fr")["findings"]
-        rule_ids = [item["rule_id"] for item in findings]
-        self.assertIn("urgency", rule_ids)
+        self.assertIn("urgency", [item["rule_id"] for item in findings])
 
     def test_keyword_dictionary_detects_english_reward(self):
         findings = analyze_message("Congratulations, you won a prize!", "en")["findings"]
@@ -24,6 +23,26 @@ class DetectorTests(unittest.TestCase):
         rule_ids = [item["rule_id"] for item in report["findings"]]
         self.assertIn("urgency", rule_ids)
         self.assertIn("reward", rule_ids)
+
+    def test_detects_ethereum_address_shape(self):
+        findings = analyze_message("Send payment to 0x" + "a" * 40, "en")["findings"]
+        self.assertIn("crypto_address", [item["rule_id"] for item in findings])
+
+    def test_detects_multilingual_money_request(self):
+        for message, language in [
+            ("Merci d'effectuer un virement bancaire", "fr"),
+            ("Please make a wire transfer", "en"),
+            ("يرجى إجراء تحويل بنكي", "ar"),
+        ]:
+            with self.subTest(language=language):
+                findings = analyze_message(message, language)["findings"]
+                self.assertIn("money_request", [item["rule_id"] for item in findings])
+
+    def test_detects_long_number_as_low_severity_clue(self):
+        findings = analyze_message("Référence : 1234 5678 9012 3456", "fr")["findings"]
+        item = next(x for x in findings if x["rule_id"] == "long_number")
+        self.assertEqual(item["severity"], "low")
+        self.assertIn("contexte", item["explanation"])
 
     def test_short_link(self):
         self.assertIn("short_link", [x["rule_id"] for x in analyze_message("https://bit.ly/abc", "fr")["findings"]])
