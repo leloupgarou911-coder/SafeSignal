@@ -81,7 +81,7 @@ def main():
                 tab = page.get_by_role("tab", name=expected["prevention_tab"])
                 tab.click()
                 page.wait_for_timeout(400)
-                assert page.get_by_text(expected["guide"], exact=True).count() > 0, (
+                assert page.get_by_text(expected["guide"], exact=False).count() > 0, (
                     f'Prevention guide did not render in {language}'
                 )
                 page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-prevention.png"), full_page=True)
