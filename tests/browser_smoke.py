@@ -132,6 +132,22 @@ def main():
                 )
                 page.screenshot(path=str(ARTIFACTS / f"{index+1}-{('fr','en','ar')[index]}-quiz.png"), full_page=True)
                 print(f"PASS {language}: analysis, prevention, custom rules and quiz rendered")
+            # Responsive regression: 720px approximates a 200%-zoom layout on a 1440px display;
+            # 375px and 320px cover common narrow mobile widths.
+            for width in (720, 375, 320):
+                page.set_viewport_size({"width": width, "height": 900})
+                page.wait_for_timeout(250)
+                textarea = page.locator('[data-testid="stTextArea"] textarea').first
+                assert textarea.is_visible(), f'Text input is not visible at {width}px for {language}'
+                box = textarea.bounding_box()
+                assert box and box["width"] <= width, f'Text input exceeds viewport at {width}px for {language}'
+                overflow = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+                assert overflow <= 12, f'Unexpected horizontal page overflow ({overflow}px) at {width}px for {language}'
+            # Basic keyboard-only focus check; a real screen reader still requires manual testing.
+            page.set_viewport_size({"width": 1440, "height": 1000})
+            page.keyboard.press("Tab")
+            focused_tag = page.evaluate("document.activeElement && document.activeElement.tagName")
+            assert focused_tag and focused_tag != "BODY", f'Keyboard focus was not exposed for {language}'
             browser.close()
     finally:
         process.terminate()
