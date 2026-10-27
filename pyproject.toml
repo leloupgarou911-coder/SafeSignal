@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "safesignal"
+version = "0.2.0"
+description = "Outil pédagogique local de détection d'indices d'arnaques dans les messages"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "SafeSignal contributors" }]
+dependencies = ["streamlit>=1.35,<2.0"]
+
+[project.scripts]
+safesignal = "safesignal.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["safesignal*", "core*", "db*"]
+exclude = ["tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
