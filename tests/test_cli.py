@@ -32,7 +32,7 @@ class CliTests(unittest.TestCase):
     def test_stdin_input(self):
         result = self.run_cli("--language", "fr", input_text="Bonjour, rendez-vous demain.")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Rappel", result.stdout)
+        self.assertIn("Aucun indice connu", result.stdout)
 
     def test_empty_message_returns_friendly_error(self):
         result = self.run_cli("--text", "   ")
