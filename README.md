@@ -10,6 +10,16 @@ Interface disponible en français, anglais et arabe (avec mise en page RTL en ar
 
 Le workflow GitHub Actions exécute un test navigateur Chromium sur les trois langues et publie les captures d'écran sous l'artefact **`safesignal-streamlit-screenshots`** pour chaque exécution. Pour les consulter : ouvrez l'onglet [Actions](https://github.com/leloupgarou911-coder/SafeSignal/actions/workflows/tests.yml), choisissez une exécution terminée, puis téléchargez l'artefact. Les captures sont des preuves de rendu automatisé, pas une certification d'accessibilité.
 
+## Accessibilité et navigation
+
+- Les champs interactifs ont des libellés et des aides descriptives.
+- Le lien « aller au contenu principal » permet de sauter les éléments de navigation.
+- Les contrôles clavier disposent d’un indicateur de focus visible et contrasté ; les onglets peuvent être parcourus au clavier.
+- Les textes secondaires et la bannière de confidentialité utilisent des couleurs vérifiées par des tests de contraste WCAG AA pour les combinaisons déclarées.
+- Les tests navigateur contrôlent les noms accessibles des onglets, la navigation par flèches et la direction LTR/RTL en français, anglais et arabe.
+
+Ces contrôles automatisés sont une base de régression, pas une certification complète WCAG. Une vérification avec lecteur d’écran et des utilisateurs reste recommandée.
+
 ## Fonctionnalités
 
 - Analyse locale par règles explicables : urgence, récompenses, liens, données sensibles, usurpation, pression, formatage et motifs régionaux.
