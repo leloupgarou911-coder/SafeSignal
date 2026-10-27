@@ -18,7 +18,7 @@ def main():
         tn += (not actual) and (not predicted)
         fn += actual and (not predicted)
         row = by_language.setdefault(case["language"], {"tp":0,"fp":0,"tn":0,"fn":0})
-        key = ("t" if actual else "f") + ("p" if predicted else "n")
+        key = "tp" if actual and predicted else "fn" if actual else "fp" if predicted else "tn"
         row[key] += 1
     precision = tp / (tp + fp) if tp + fp else 0
     recall = tp / (tp + fn) if tp + fn else 0
