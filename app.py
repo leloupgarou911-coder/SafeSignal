@@ -9,6 +9,7 @@ from core.language import detect_language
 from core.explain import LIBRARY
 from core.prevention import get_guides
 from core.quiz import get_quiz
+from core.ocr import extract_text, InvalidImageError, OCRUnavailableError
 from db.storage import (
     add_custom_rule, clear_history, delete_custom_rule, get_custom_rules,
     init_db, list_history, save_analysis,
@@ -80,8 +81,8 @@ st.markdown(f'<div class="trust">🔒 <b>{T["privacy_title"]}</b><br>{T["privacy
 if not DB_READY:
     st.error(E["storage"])
 
-analyze_tab, library_tab, prevention_tab, rules_tab, quiz_tab, history_tab, about_tab = st.tabs([
-    T["analyze"], T["library"], T["prevention"], T["custom_rules"],
+analyze_tab, ocr_tab, library_tab, prevention_tab, rules_tab, quiz_tab, history_tab, about_tab = st.tabs([
+    T["analyze"], T["ocr_tab"], T["library"], T["prevention"], T["custom_rules"],
     T["quiz"], T["history"], T["about"],
 ])
 
@@ -127,6 +128,48 @@ with analyze_tab:
         st.markdown(f'**{T["next_steps"]}**')
         for tip in report["general_advice"]:
             st.write("• " + tip)
+
+with ocr_tab:
+    st.subheader(T["ocr_title"])
+    st.caption(T["ocr_privacy"])
+    uploaded_image = st.file_uploader(
+        T["ocr_upload"],
+        type=["png", "jpg", "jpeg", "webp"],
+        key="ocr_image_upload",
+        help=T["ocr_upload_help"],
+    )
+    ocr_language = st.selectbox(
+        T["ocr_language"],
+        [T["ocr_french"], T["ocr_english"], T["ocr_arabic"]],
+        key="ocr_language_choice",
+    )
+    language_codes = {
+        T["ocr_french"]: "fra+eng",
+        T["ocr_english"]: "eng",
+        T["ocr_arabic"]: "ara+eng",
+    }
+    if uploaded_image is not None:
+        st.image(uploaded_image, caption=T["ocr_preview"], use_container_width=True)
+        if st.button(T["ocr_button"], type="primary", key="run_local_ocr"):
+            try:
+                extracted = extract_text(uploaded_image.getvalue(), language_codes[ocr_language])
+                st.session_state["ocr_extracted_text"] = extracted
+                st.session_state["ocr_error"] = None
+            except InvalidImageError as exc:
+                st.session_state["ocr_error"] = str(exc)
+                st.session_state.pop("ocr_extracted_text", None)
+            except OCRUnavailableError as exc:
+                st.session_state["ocr_error"] = str(exc)
+                st.session_state.pop("ocr_extracted_text", None)
+    if st.session_state.get("ocr_error"):
+        st.warning(T["ocr_unavailable"] + " " + st.session_state["ocr_error"])
+    if st.session_state.get("ocr_extracted_text") is not None:
+        extracted = st.session_state["ocr_extracted_text"]
+        if extracted:
+            st.text_area(T["ocr_result"], value=extracted, height=200)
+            st.caption(T["ocr_copy_hint"])
+        else:
+            st.info(T["ocr_no_text"])
 
 with library_tab:
     st.subheader(T["library"])
