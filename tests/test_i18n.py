@@ -30,6 +30,17 @@ class TranslationTests(unittest.TestCase):
                     self.assertIsInstance(value, str)
                     self.assertTrue(value.strip())
 
+    def test_reset_controls_are_translated_in_all_three_languages(self):
+        self.assertEqual(self.translations["fr"]["clear_message"], "Réinitialiser la zone de texte")
+        self.assertEqual(self.translations["en"]["clear_message"], "Reset message and result")
+        self.assertEqual(self.translations["ar"]["clear_message"], "إعادة ضبط حقل الرسالة")
+        self.assertEqual(self.translations["fr"]["ocr_clear"], "Réinitialiser l’outil OCR")
+        self.assertEqual(self.translations["en"]["ocr_clear"], "Reset OCR image and extracted text")
+        self.assertEqual(self.translations["ar"]["ocr_clear"], "إعادة ضبط أداة استخراج النص")
+        for key in ("clear_message", "ocr_clear"):
+            with self.subTest(key=key):
+                self.assertRegex(self.translations["ar"][key], r"[\\u0600-\\u06FF]")
+
     def test_format_placeholders_match_between_languages(self):
         def placeholders(value):
             return set(re.findall(r"\{([a-zA-Z_][a-zA-Z0-9_]*)\}", value))
