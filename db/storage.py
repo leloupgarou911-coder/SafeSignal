@@ -18,6 +18,7 @@ def init_db():
 
 
 def save_analysis(report: dict, original_text: str, consent: bool = False):
+    """Persist a report only when the user explicitly opts in."""
     if not consent:
         return False
     summary = ", ".join(item["title"] for item in report["findings"]) or "No pattern detected"
@@ -30,9 +31,11 @@ def save_analysis(report: dict, original_text: str, consent: bool = False):
 
 
 def list_history():
+    """Return recent saved analyses, including original text only from opted-in rows."""
     with _connect() as connection:
         rows = connection.execute(
-            "SELECT id, created_at, summary, report FROM analyses ORDER BY id DESC LIMIT 100"
+            "SELECT id, created_at, summary, report, original_text "
+            "FROM analyses ORDER BY id DESC LIMIT 100"
         ).fetchall()
     return [dict(row) for row in rows]
 
