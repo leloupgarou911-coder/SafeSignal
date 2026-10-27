@@ -52,6 +52,22 @@ HISTORY_LABELS = {
     "ar": {"language": "لغة التقرير", "alerts": "المؤشرات المكتشفة", "message": "الرسالة التي تم تحليلها", "details": "التفاصيل"},
 }
 
+def _clear_analysis_session():
+    """Drop the current message and report from Streamlit session state."""
+    st.session_state["analysis_form_version"] = st.session_state.get("analysis_form_version", 0) + 1
+    st.session_state.pop("report", None)
+
+
+def _clear_ocr_session():
+    """Forget the current upload widget and OCR result for this session."""
+    st.session_state["ocr_upload_version"] = st.session_state.get("ocr_upload_version", 0) + 1
+    st.session_state.pop("ocr_extracted_text", None)
+    st.session_state.pop("ocr_error", None)
+
+
+st.session_state.setdefault("analysis_form_version", 0)
+st.session_state.setdefault("ocr_upload_version", 0)
+
 try:
     init_db()
     DB_READY = True
@@ -113,8 +129,9 @@ analyze_tab, ocr_tab, library_tab, prevention_tab, rules_tab, quiz_tab, history_
 
 with analyze_tab:
     st.subheader(T["paste_title"])
-    message = st.text_area(T["paste_label"], height=190, max_chars=20000, placeholder=T["placeholder"], help=T["message_help"])
-    consent = st.checkbox(T["save_option"], value=False, help=T["save_help"])
+    form_version = st.session_state["analysis_form_version"]
+    message = st.text_area(T["paste_label"], height=190, max_chars=20000, placeholder=T["placeholder"], help=T["message_help"], key=f"analysis_message_{form_version}")
+    consent = st.checkbox(T["save_option"], value=False, help=T["save_help"], key=f"analysis_consent_{form_version}")
     if st.button(T["analyze_button"], type="primary", use_container_width=True):
         if not message.strip():
             st.warning(T["empty_warning"])
@@ -135,6 +152,7 @@ with analyze_tab:
             except (ValueError, TypeError, KeyError, sqlite3.Error):
                 st.error(E["analysis"])
                 st.session_state.pop("report", None)
+    st.button(T["clear_message"], on_click=_clear_analysis_session, key="clear_current_message")
     report = st.session_state.get("report")
     if report:
         st.divider()
@@ -160,7 +178,7 @@ with ocr_tab:
     uploaded_image = st.file_uploader(
         T["ocr_upload"],
         type=["png", "jpg", "jpeg", "webp"],
-        key="ocr_image_upload",
+        key=f"ocr_image_upload_{st.session_state['ocr_upload_version']}",
         help=T["ocr_upload_help"],
     )
     ocr_language = st.selectbox(
@@ -187,6 +205,7 @@ with ocr_tab:
             except OCRUnavailableError as exc:
                 st.session_state["ocr_error"] = str(exc)
                 st.session_state.pop("ocr_extracted_text", None)
+    st.button(T["ocr_clear"], on_click=_clear_ocr_session, key="clear_ocr_upload")
     if st.session_state.get("ocr_error"):
         st.warning(T["ocr_unavailable"] + " " + st.session_state["ocr_error"])
     if st.session_state.get("ocr_extracted_text") is not None:
