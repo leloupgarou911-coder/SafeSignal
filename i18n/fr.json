@@ -61,7 +61,7 @@
   "quiz_incorrect": "Pas tout à fait.",
   "ocr_tab": "🖼️ OCR local",
   "ocr_title": "Lire le texte d’une capture d’écran",
-  "ocr_privacy": "L’image est traitée sur cet appareil et n’est ni envoyée à une API ni enregistrée par SafeSignal. Cette fonction nécessite Tesseract installé localement.",
+  "ocr_privacy": "L’image est traitée par l’instance SafeSignal qui exécute l’application, sans API externe, et n’est pas enregistrée dans la base de données. Elle reste temporairement disponible dans la session pendant l’utilisation.",
   "ocr_upload": "Choisissez une capture d’écran",
   "ocr_upload_help": "Formats acceptés : PNG, JPG/JPEG et WebP. Taille maximale : 8 Mo.",
   "ocr_language": "Langue du texte dans l’image",
