@@ -10,6 +10,17 @@ from .rules.regional import RULES as REGIONAL
 # Ajouter une famille de règles ici sans modifier l'algorithme d'analyse.
 RULES = URGENCY + REWARD + LINKS + DATA + IDENTITY + PRESSURE + FORMATTING + REGIONAL
 
+# A local brand name alone is not a warning sign. Require a social-engineering cue.
+import re
+REGIONAL_RISK_CUE = re.compile(
+    r"(urgent|immediately|verify|verification|confirm|blocked|suspend|suspended|"
+    r"click|pay now|payment required|code|otp|mot de passe|confirmez|confirmer|"
+    r"bloqu[eé]|suspendu|vérifi|verifi|cliquez|payer|paiement|code secret|"
+    r"رمز|تحقق|أكد|تأكيد|موقوف|محظور|مغلق|عاجل|اضغط|ادفع|دفع|كلمة السر|"
+    r"compte.{0,20}(?:bloqu|suspend)|account.{0,20}(?:blocked|suspended))",
+    re.I,
+)
+
 def analyze_message(text: str, language: str = "fr") -> dict:
     """Apply transparent rules. 'language' controls report translations, not detection."""
     language = language if language in {"fr", "en", "ar"} else "fr"
@@ -17,6 +28,8 @@ def analyze_message(text: str, language: str = "fr") -> dict:
     for rule in RULES:
         match = rule.pattern.search(text)
         if match:
+            if rule.id == "regional_payment_impersonation" and not REGIONAL_RISK_CUE.search(text):
+                continue
             findings.append({
                 "rule_id": rule.id,
                 "category": rule.category,
