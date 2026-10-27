@@ -7,9 +7,13 @@ from .rules.pressure import RULES as PRESSURE
 from .rules.formatting import RULES as FORMATTING
 from .rules.regional import RULES as REGIONAL
 from .rules.financial_indicators import RULES as FINANCIAL
+from .rules.social_engineering import RULES as SOCIAL_ENGINEERING
 
 # Ajouter une famille de règles ici sans modifier l'algorithme d'analyse.
-RULES = URGENCY + REWARD + LINKS + DATA + IDENTITY + PRESSURE + FORMATTING + REGIONAL + FINANCIAL
+RULES = (
+    URGENCY + REWARD + LINKS + DATA + IDENTITY + PRESSURE + FORMATTING
+    + REGIONAL + FINANCIAL + SOCIAL_ENGINEERING
+)
 
 # A local brand name alone is not a warning sign. Require a social-engineering cue.
 import re
