@@ -73,5 +73,15 @@
   "ocr_unavailable": "OCR unavailable:",
   "ocr_result": "Extracted text (you can copy it into the Analyze tab)",
   "ocr_copy_hint": "Review the extracted text: OCR can confuse characters, digits, or links.",
-  "ocr_no_text": "No text was recognized. Try a clearer image or another language."
+  "ocr_no_text": "No text was recognized. Try a clearer image or another language.",
+  "calibration_title": "Evaluate the test corpus",
+  "calibration_intro": "Calculates metrics using the synthetic examples included in the repository.",
+  "calibration_button": "Evaluate synthetic corpus",
+  "calibration_note": "Important: these results describe only this small artificial corpus. They do not measure real-world accuracy on everyday messages.",
+  "calibration_total": "Examples evaluated",
+  "calibration_precision": "Precision",
+  "calibration_recall": "Recall",
+  "calibration_specificity": "Specificity",
+  "calibration_language": "Results by language",
+  "calibration_counts": "TP: {tp} · FP: {fp} · TN: {tn} · FN: {fn}"
 }
