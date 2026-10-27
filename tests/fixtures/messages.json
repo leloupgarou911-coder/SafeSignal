@@ -166,5 +166,131 @@
     "label": "suspicious",
     "text": "Congratulations, you won a free gift. Claim your prize today.",
     "expected_rule": "reward"
+  },
+  {
+    "id": "fr_09",
+    "language": "fr",
+    "label": "benign",
+    "text": "J'utilise Microsoft Excel pour préparer mon exposé.",
+    "expected_rule": null
+  },
+  {
+    "id": "fr_10",
+    "language": "fr",
+    "label": "benign",
+    "text": "Le paiement de ma commande a été effectué hier, merci.",
+    "expected_rule": null
+  },
+  {
+    "id": "fr_11",
+    "language": "fr",
+    "label": "benign",
+    "text": "Le colis est arrivé au point relais ; je le récupère samedi.",
+    "expected_rule": null
+  },
+  {
+    "id": "fr_12",
+    "language": "fr",
+    "label": "suspicious",
+    "text": "Votre ordinateur est infecté, appelez ce numéro pour une assistance technique.",
+    "expected_rule": "fake_tech_support"
+  },
+  {
+    "id": "fr_13",
+    "language": "fr",
+    "label": "suspicious",
+    "text": "Vous avez gagné un cadeau gratuit, cliquez pour réclamer la récompense.",
+    "expected_rule": "reward"
+  },
+  {
+    "id": "fr_14",
+    "language": "fr",
+    "label": "suspicious",
+    "text": "URGENT : votre compte sera suspendu, vérifiez vos informations maintenant.",
+    "expected_rule": "threat"
+  },
+  {
+    "id": "en_09",
+    "language": "en",
+    "label": "benign",
+    "text": "I use Microsoft Excel for school assignments.",
+    "expected_rule": null
+  },
+  {
+    "id": "en_10",
+    "language": "en",
+    "label": "benign",
+    "text": "The bank branch opens at 9 AM on weekdays.",
+    "expected_rule": null
+  },
+  {
+    "id": "en_11",
+    "language": "en",
+    "label": "benign",
+    "text": "My parcel arrived at the pickup point; I'll collect it Saturday.",
+    "expected_rule": null
+  },
+  {
+    "id": "en_12",
+    "language": "en",
+    "label": "suspicious",
+    "text": "Your computer is infected with a virus; call this number for technical support.",
+    "expected_rule": "fake_tech_support"
+  },
+  {
+    "id": "en_13",
+    "language": "en",
+    "label": "suspicious",
+    "text": "Congratulations, you won a free gift. Claim your prize today.",
+    "expected_rule": "reward"
+  },
+  {
+    "id": "en_14",
+    "language": "en",
+    "label": "suspicious",
+    "text": "FINAL WARNING!!! Your account will be closed. Verify your details now.",
+    "expected_rule": "threat"
+  },
+  {
+    "id": "ar_dz_09",
+    "language": "ar-DZ",
+    "label": "benign",
+    "text": "نستعمل تطبيق Microsoft Excel في الدراسة.",
+    "expected_rule": null
+  },
+  {
+    "id": "ar_dz_10",
+    "language": "ar-DZ",
+    "label": "benign",
+    "text": "البنك يفتح على الساعة التاسعة صباحاً في أيام الأسبوع.",
+    "expected_rule": null
+  },
+  {
+    "id": "ar_dz_11",
+    "language": "ar-DZ",
+    "label": "benign",
+    "text": "وصل الطرد لمكتب التوصيل، نروح نديه نهار السبت.",
+    "expected_rule": null
+  },
+  {
+    "id": "ar_dz_12",
+    "language": "ar-DZ",
+    "label": "suspicious",
+    "text": "حاسوبك مصاب بفيروس، اتصل بهذا الرقم للدعم الفني.",
+    "expected_rule": "fake_tech_support"
+  },
+  {
+    "id": "ar_dz_13",
+    "language": "ar-DZ",
+    "label": "suspicious",
+    "text": "مبروك ربحت جائزة مجانية، اضغط هنا لاستلام الهدية.",
+    "expected_rule": "reward"
+  },
+  {
+    "id": "ar_dz_14",
+    "language": "ar-DZ",
+    "label": "suspicious",
+    "text": "آخر إنذار: سيتم إيقاف حسابك، أكد معلوماتك الآن.",
+    "expected_rule": "threat"
   }
 ]
