@@ -42,6 +42,29 @@ class OCRInputTests(unittest.TestCase):
         with self.assertRaises(InvalidImageError):
             extract_text(png_bytes(size=(5001, 1)))
 
+    def test_ocr_does_not_write_the_uploaded_image_to_disk(self):
+        import os
+        import sys
+        import tempfile
+        import types
+        from unittest.mock import patch
+
+        fake = types.ModuleType("pytesseract")
+        fake.TesseractError = type("TesseractError", (Exception,), {})
+        fake.TesseractNotFoundError = type("TesseractNotFoundError", (Exception,), {})
+        fake.image_to_string = lambda image, lang: "sample extracted text"
+        previous_directory = os.getcwd()
+        try:
+            with tempfile.TemporaryDirectory() as directory:
+                os.chdir(directory)
+                with patch.dict(sys.modules, {"pytesseract": fake}):
+                    result = extract_text(png_bytes())
+                self.assertEqual(result, "sample extracted text")
+                self.assertEqual(os.listdir(directory), [])
+        finally:
+            os.chdir(previous_directory)
+
+
 
 if __name__ == "__main__":
     unittest.main()
