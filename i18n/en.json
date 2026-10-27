@@ -58,5 +58,20 @@
   "quiz_scam": "⚠️ Probably suspicious",
   "quiz_legitimate": "✅ Less suspicious",
   "quiz_correct": "Correct!",
-  "quiz_incorrect": "Not quite."
+  "quiz_incorrect": "Not quite.",
+  "ocr_tab": "🖼️ Local OCR",
+  "ocr_title": "Read text from a screenshot",
+  "ocr_privacy": "The image is processed on this device and is not sent to an API or saved by SafeSignal. This feature requires Tesseract to be installed locally.",
+  "ocr_upload": "Choose a screenshot",
+  "ocr_upload_help": "Accepted formats: PNG, JPG/JPEG and WebP. Maximum size: 8 MB.",
+  "ocr_language": "Language in the image",
+  "ocr_french": "French",
+  "ocr_english": "English",
+  "ocr_arabic": "Arabic (with possible Latin text)",
+  "ocr_preview": "Image preview",
+  "ocr_button": "Extract text offline",
+  "ocr_unavailable": "OCR unavailable:",
+  "ocr_result": "Extracted text (you can copy it into the Analyze tab)",
+  "ocr_copy_hint": "Review the extracted text: OCR can confuse characters, digits, or links.",
+  "ocr_no_text": "No text was recognized. Try a clearer image or another language."
 }
