@@ -43,3 +43,35 @@ def list_history():
 def clear_history():
     with _connect() as connection:
         connection.execute("DELETE FROM analyses")
+
+
+def add_custom_rule(keyword: str, label: str, explanation: str) -> bool:
+    """Store a user's local keyword rule; return False when the keyword already exists."""
+    keyword = keyword.strip().casefold()
+    label = label.strip()
+    explanation = explanation.strip()
+    if not keyword or not label or not explanation:
+        raise ValueError("keyword, label and explanation are required")
+    try:
+        with _connect() as connection:
+            connection.execute(
+                "INSERT INTO custom_rules(keyword, label, explanation) VALUES (?, ?, ?)",
+                (keyword, label, explanation),
+            )
+        return True
+    except sqlite3.IntegrityError:
+        return False
+
+
+def get_custom_rules():
+    """Return custom rules as tuples to keep a simple, stable interface for the UI."""
+    with _connect() as connection:
+        rows = connection.execute(
+            "SELECT id, keyword, label, explanation FROM custom_rules ORDER BY id DESC"
+        ).fetchall()
+    return [tuple(row) for row in rows]
+
+
+def delete_custom_rule(rule_id: int):
+    with _connect() as connection:
+        connection.execute("DELETE FROM custom_rules WHERE id = ?", (rule_id,))
