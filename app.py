@@ -30,7 +30,8 @@ with a:
  if st.button(T["analyze_button"],type="primary",use_container_width=True):
   if not message.strip(): st.warning(T["empty_warning"])
   else:
-   report=analyze_message(message,detect_language(message))
+   report=analyze_message(message,lang)
+   report["detected_language"]=detect_language(message)
    st.session_state["report"]=report
    if consent: save_analysis(report,message,consent=True)
    else: st.info(T["not_saved"])
